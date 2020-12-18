@@ -68,11 +68,23 @@ ansible-playbook -i hosts-deploy.yml 5-deploy.yml
 Los pasos 1 a 4 se realizan una unica vez. 
 Si el paso automatizado de crear la base de datos prefiere realizarse externamente a estos playbooks, omitir el plabook `3-create-database.yml`, de todas formas debe indicarse el `postgres_master` porque su IP es necesaria para configurar el backend.
 
-Con siguientes deploys solo es necesario ejecutar el paso 5.
-
+## Actualizar versiones
+Con siguientes deploys solo será necesario ejecutar los siguientes pasos:
+ 
+1. Actualizar el código fuente con la nueva versión a través del siguiente comando:
+```
+	git fetch --tags
+	git checkout <tag_name>
+```
+2. Generar los artefactos necesarios para el despliegue de la nueva versión, ejecutando desde el directorio raíz lo siguiente:
+```
+	./scripts/build-ansible.sh
+```
+3. Ejecutar el playbook '***5-deploy.yml***' de **ANSIBLE** el cual hará la migración (*actualización*) de la base de datos y despliegará los artefactos tanto de Back-end como Front-end. 
 ```
 ansible-playbook -i hosts-deploy.yml 5-deploy.yml
 ```
+Al finalizar esta serie de pasos, la aplicación ya estará disponible con la nueva versión. 
 
 ## Problemas conocidos y solución de errores
 
